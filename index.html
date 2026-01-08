@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NESTO - Neurodivergent Education Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --accent: #5a67d8;
+            --accent-light: #667eea;
+            --border: #e2e8f0;
+            --success: #48bb78;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        [data-sensory="soft"] {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #e6f0f5;
+            --accent: #64748b;
+        }
+
+        [data-sensory="expressive"] {
+            --bg-primary: #fef3c7;
+            --bg-secondary: #fde68a;
+            --accent: #f59e0b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #e0e7ff 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Landing Screen */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            padding: 1.25rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            cursor: pointer;
+            min-width: 250px;
+            min-height: 70px;
+            margin: 0.75rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(90, 103, 216, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--accent);
+            border: 3px solid var(--accent);
+        }
+
+        /* Activity Grid */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            min-height: 160px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 50px rgba(90, 103, 216, 0.2);
+        }
+
+        .activity-card.recommended {
+            border-color: var(--success);
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+        }
+
+        .activity-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .activity-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .activity-desc {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Activity Canvas */
+        .activity-canvas {
+            background: white;
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: var(--shadow);
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .question {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .target-display {
+            font-size: 6rem;
+            margin-bottom: 3rem;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .options-grid {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .option-btn {
+            width: 140px;
+            height: 140px;
+            background: white;
+            border: 4px solid var(--border);
+            border-radius: 25px;
+            font-size: 4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .option-btn:hover {
+            transform: scale(1.1);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(90, 103, 216, 0.3);
+        }
+
+        .option-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Feedback */
+        .feedback {
+            font-size: 2rem;
+            text-align: center;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            font-weight: 600;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback.success {
+            background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+            color: #22543d;
+        }
+
+        .feedback.try-again {
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+            color: #742a2a;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .modal-text {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        /* Dashboard */
+        .dashboard-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .sensory-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .sensory-btn {
+            padding: 1rem 2rem;
+            border: 3px solid var(--border);
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .sensory-btn:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .sensory-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .progress-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 2px solid var(--border);
+        }
+
+        .progress-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 100%);
+            transition: width 0.6s ease;
+        }
+
+        .log-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .sequence-builder {
+            min-height: 100px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 3px dashed var(--border);
+            margin-top: 2rem;
+        }
+
+        .sequence-item {
+            font-size: 3rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .countdown {
+            font-size: 8rem;
+            font-weight: bold;
+            color: var(--accent);
+            animation: pulse 1s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .disclaimer {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .logo { font-size: 3rem; }
+            .tagline { font-size: 1.2rem; }
+            .btn { min-width: 200px; padding: 1rem 2rem; }
+            .option-btn { width: 100px; height: 100px; font-size: 3rem; }
+            .target-display { font-size: 4rem; }
+        }
+    </style>
+</head>
+<body data-sensory="minimal">
+
+    <!-- Landing Screen -->
+    <div id="landing" class="screen active">
+        <div class="hero">
+            <div class="logo">🌟 NESTO</div>
+            <p class="tagline">Neurodivergent Education through Structured Transfer & Observation</p>
+            <div>
+                <button class="btn" id="startLearningBtn">🎯 Start Learning</button>
+                <button class="btn btn-secondary" id="parentDashBtn">👨‍👩‍👧 Parent Dashboard</button>
+            </div>
+            <p class="disclaimer">Educational support tool • Not for diagnosis or therapy</p>
+        </div>
+    </div>
+
+    <!-- Child Interface -->
+    <div id="childInterface" class="screen">
+        <div class="container">
+            <div class="header">
+                <h1 class="page-title">Choose an Activity</h1>
+                <button class="btn btn-secondary" id="exitChild">🏠 Exit</button>
+            </div>
+
+            <div class="activity-card recommended" id="recommendedCard">
+                <div class="activity-icon">📋</div>
+                <div class="activity-title">Sequencing</div>
+                <div class="activity-desc">Put things in the right order • Recommended</div>
+            </div>
+
+            <div class="activity-grid" id="activityGrid"></div>
+        </div>
+    </div>
+
+    <!-- Activity Screen -->
+    <div id="activityScreen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h1 class="page-title" id="activityTitle"></h1>
+                <button class="btn btn-secondary" id="backBtn">← Back</button>
+            </div>
+            <div class="activity-canvas" id="canvas"></div>
+            <div id="feedbackArea"></div>
+        </div>
+    </div>
+
+    <!-- Offline Task Modal -->
+    <div id="offlineModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-title">🌍 Real-World Practice</div>
+            <div class="modal-text" id="offlineTaskText"></div>
+            <div class="modal-buttons">
+                <button class="btn" id="taskDone">✅ Done</button>
+                <button class="btn btn-secondary" id="taskSkip">⏭️ Skip for Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parent Dashboard -->
+    <div id="parentDashboard" class="screen">
+        <div class="container">
+            <div class="header">
+                <h1 class="page-title">Parent Dashboard</h1>
+                <button class="btn btn-secondary" id="exitParent">🏠 Exit</button>
+            </div>
+
+            <div class="dashboard-section">
+                <h2 class="section-title">🎨 Sensory Mode</h2>
+                <div class="sensory-buttons">
+                    <button class="sensory-btn active" data-mode="minimal">Minimal</button>
+                    <button class="sensory-btn" data-mode="soft">Soft</button>
+                    <button class="sensory-btn" data-mode="expressive">Expressive</button>
+                </div>
+                <p style="margin-top: 1rem; color: var(--text-secondary)">Current: <strong id="currentMode">Minimal</strong></p>
+            </div>
+
+            <div class="dashboard-section">
+                <h2 class="section-title">📊 Skill Progress</h2>
+                <div class="progress-grid" id="progressGrid"></div>
+            </div>
+
+            <div class="dashboard-section">
+                <h2 class="section-title">✅ Offline Task Completion</h2>
+                <div id="taskLog"></div>
+            </div>
+
+            <div class="dashboard-section">
+                <h2 class="section-title">🔄 Recent Adaptations</h2>
+                <div id="adaptLog"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Storage Manager
+        const Storage = {
+            init() {
+                if (!localStorage.getItem('nesto')) {
+                    const data = {
+                        sensoryMode: 'minimal',
+                        progress: {},
+                        offlineTasks: [],
+                        adaptations: []
+                    };
+                    localStorage.setItem('nesto', JSON.stringify(data));
+                }
+            },
+            get() {
+                try {
+                    return JSON.parse(localStorage.getItem('nesto'));
+                } catch {
+                    return { sensoryMode: 'minimal', progress: {}, offlineTasks: [], adaptations: [] };
+                }
+            },
+            save(data) {
+                localStorage.setItem('nesto', JSON.stringify(data));
+            }
+        };
+
+        // Activities Configuration
+        const activities = {
+            'sequencing': {
+                title: 'Sequencing',
+                icon: '📋',
+                desc: 'Put things in the right order',
+                offlineTask: 'Practice your morning routine in order: Wake up, brush teeth, get dressed, eat breakfast.',
+                examples: ['daily actions', 'size ordering', 'story sequence'],
+                render: () => {
+                    const sequences = [
+                        { items: ['🛏️', '🪥', '👕', '🍳'], desc: 'Put these morning steps in order:' },
+                        { items: ['🐭', '🐕', '🐘', '🦒'], desc: 'Put these from smallest to biggest:' },
+                        { items: ['🌱', '🌿', '🌳', '🌲'], desc: 'Put these in growing order:' }
+                    ];
+                    const seq = sequences[Math.floor(Math.random() * sequences.length)];
+                    const shuffled = [...seq.items].sort(() => Math.random() - 0.5);
+                    
+                    window.correctSeq = seq.items;
+                    window.userSeq = [];
+                    
+                    const canvas = document.getElementById('canvas');
+                    canvas.innerHTML = `
+                        <div class="question">${seq.desc}</div>
+                        <div class="options-grid" id="optionsGrid"></div>
+                        <div class="sequence-builder" id="seqBuilder">
+                            <p style="color: var(--text-secondary);">Tap items in the correct order</p>
+                        </div>
+                    `;
+                    
+                    const grid = document.getElementById('optionsGrid');
+                    shuffled.forEach(item => {
+                        const btn = document.createElement('div');
+                        btn.className = 'option-btn';
+                        btn.textContent = item;
+                        btn.dataset.item = item;
+                        btn.addEventListener('click', () => addToSequence(item, btn));
+                        grid.appendChild(btn);
+                    });
+                }
+            },
+            'pattern-recognition': {
+                title: 'Pattern Recognition',
+                icon: '🎨',
+                desc: 'Complete the pattern',
+                offlineTask: 'Create a pattern with toys or blocks: red, blue, red, blue. Ask someone to add the next one.',
+                examples: ['color patterns', 'shape patterns', 'visual rhythm'],
+                render: () => {
+                    const patterns = [
+                        { sequence: ['🔴', '🔵', '🔴', '🔵'], answer: '🔴', options: ['🔴', '🔵', '🟢'] },
+                        { sequence: ['⭐', '🔷', '⭐', '🔷'], answer: '⭐', options: ['⭐', '🔷', '⭕'] },
+                        { sequence: ['🟨', '🟩', '🟨', '🟩'], answer: '🟨', options: ['🟨', '🟩', '🟦'] }
+                    ];
+                    const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+                    
+                    const canvas = document.getElementById('canvas');
+                    canvas.innerHTML = `
+                        <div class="question">What comes next in this pattern?</div>
+                        <div style="display: flex; gap: 1rem; justify-content: center; align-items: center; margin: 2rem 0; font-size: 4rem;">
+                            ${pattern.sequence.map(item => `<div>${item}</div>`).join('')}
+                            <div style="color: var(--text-secondary);">→ ?</div>
+                        </div>
+                        <div class="options-grid" id="optionsGrid"></div>
+                    `;
+                    
+                    const grid = document.getElementById('optionsGrid');
+                    pattern.options.forEach(opt => {
+                        const btn = document.createElement('div');
+                        btn.className = 'option-btn';
+                        btn.textContent = opt;
+                        btn.addEventListener('click', () => checkAnswer(opt, pattern.answer));
+                        grid.appendChild(btn);
+                    });
+                }
+            },
+            'categorization': {
+                title: 'Categorization',
+                icon: '📦',
+                desc: 'Sort things into groups',
+                offlineTask: 'Sort your toys into two groups: stuffed animals and other toys.',
+                examples: ['animals vs objects', 'indoor vs outdoor', 'smooth vs rough'],
+                render: () => {
+                    const categories = [
+                        { 
+                            items: ['🐕', '🐈', '🚗', '✈️', '🐘', '🏠'],
+                            category1: 'Animals',
+                            category2: 'Things',
+                            group1: ['🐕', '🐈', '🐘'],
+                            group2: ['🚗', '✈️', '🏠']
+                        },
+                        {
+                            items: ['🛋️', '🌳', '📺', '🌸', '🪑', '🌻'],
+                            category1: 'Indoor',
+                            category2: 'Outdoor',
+                            group1: ['🛋️', '📺', '🪑'],
+                            group2: ['🌳', '🌸', '🌻']
+                        }
+                    ];
+                    const cat = categories[Math.floor(Math.random() * categories.length)];
+                    const shuffled = [...cat.items].sort(() => Math.random() - 0.5);
+                    
+                    window.catData = cat;
+                    window.sorted = { group1: [], group2: [] };
+                    
+                    const canvas = document.getElementById('canvas');
+                    canvas.innerHTML = `
+                        <div class="question">Sort these items:</div>
+                        <div class="options-grid" id="itemsGrid"></div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+                            <div>
+                                <h3 style="text-align: center; margin-bottom: 1rem; color: var(--accent);">${cat.category1}</h3>
+                                <div class="sequence-builder" id="group1" style="min-height: 150px;"></div>
+                            </div>
+                            <div>
+                                <h3 style="text-align: center; margin-bottom: 1rem; color: var(--accent);">${cat.category2}</h3>
+                                <div class="sequence-builder" id="group2" style="min-height: 150px;"></div>
+                            </div>
+                        </div>
+                        <button class="btn" id="checkSorting" style="margin-top: 2rem;">Check My Sorting</button>
+                    `;
+                    
+                    const itemsGrid = document.getElementById('itemsGrid');
+                    shuffled.forEach(item => {
+                        const btn = document.createElement('div');
+                        btn.className = 'option-btn';
+                        btn.textContent = item;
+                        btn.dataset.item = item;
+                        btn.addEventListener('click', () => sortItem(item, btn));
+                        itemsGrid.appendChild(btn);
+                    });
+                    
+                    setTimeout(() => {
+                        document.getElementById('checkSorting').addEventListener('click', checkSorting);
+                    }, 100);
+                }
+            },
+            'cause-effect': {
+                title: 'Cause and Effect',
+                icon: '⚡',
+                desc: 'See what happens',
+                offlineTask: 'Practice cause and effect: Turn a light switch on and off, or open and close a door.',
+                examples: ['switch → light', 'rain → plant grows', 'button → door opens'],
+                render: () => {
+                    const scenarios = [
+                        { cause: '💡', effect: '✨', instruction: 'Tap the light bulb to turn it on' },
+                        { cause: '🌧️', effect: '🌱', instruction: 'Tap the rain cloud to water the plant' },
+                        { cause: '🔘', effect: '🚪', instruction: 'Tap the button to open the door' }
+                    ];
+                    const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+                    
+                    window.effectShown = false;
+                    
+                    const canvas = document.getElementById('canvas');
+                    canvas.innerHTML = `
+                        <div class="question">${scenario.instruction}</div>
+                        <div style="display: flex; gap: 4rem; align-items: center; justify-content: center; margin: 3rem 0;">
+                            <div id="causeBtn" class="option-btn" style="cursor: pointer; font-size: 5rem; width: 160px; height: 160px;">
+                                ${scenario.cause}
+                            </div>
+                            <div style="font-size: 3rem; color: var(--text-secondary);">→</div>
+                            <div id="effectArea" style="font-size: 5rem; width: 160px; height: 160px; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                                ${scenario.effect}
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.getElementById('causeBtn').addEventListener('click', () => {
+                        if (!window.effectShown) {
+                            window.effectShown = true;
+                            const effectArea = document.getElementById('effectArea');
+                            effectArea.style.opacity = '1';
+                            effectArea.style.transform = 'scale(1.2)';
+                            effectArea.style.transition = 'all 0.5s ease';
+                            
+                            session.attempts++;
+                            session.correct++;
+                            session.rounds++;
+                            
+                            setTimeout(() => {
+                                effectArea.style.transform = 'scale(1)';
+                                updateProgressIndicator();
+                                showFeedback("Let's continue", true);
+                                setTimeout(() => {
+                                    if (session.rounds >= session.totalRounds) {
+                                        endActivity();
+                                    } else {
+                                        document.getElementById('feedbackArea').innerHTML = '';
+                                        activities[currentActivity].render();
+                                    }
+                                }, 1500);
+                            }, 500);
+                        }
+                    });
+                }
+            },
+            'attention-control': {
+                title: 'Attention Control',
+                icon: '🎯',
+                desc: 'Find and focus',
+                offlineTask: 'Look around and find 3 things that are the same color.',
+                examples: ['find matching shape', 'follow moving object', 'select the same item'],
+                render: () => {
+                    const tasks = [
+                        {
+                            instruction: 'Find the matching shape:',
+                            target: '⭐',
+                            options: ['⭐', '🔷', '🔶', '⭕']
+                        },
+                        {
+                            instruction: 'Find the same item:',
+                            target: '🍎',
+                            options: ['🍎', '🍊', '🍌', '🍇']
+                        },
+                        {
+                            instruction: 'Which one matches?',
+                            target: '🔵',
+                            options: ['🔵', '🔴', '🟢', '🟡']
+                        }
+                    ];
+                    const task = tasks[Math.floor(Math.random() * tasks.length)];
+                    const shuffled = [...task.options].sort(() => Math.random() - 0.5);
+                    
+                    const canvas = document.getElementById('canvas');
+                    canvas.innerHTML = `
+                        <div class="question">${task.instruction}</div>
+                        <div class="target-display">${task.target}</div>
+                        <div class="options-grid" id="optionsGrid"></div>
+                    `;
+                    
+                    const grid = document.getElementById('optionsGrid');
+                    shuffled.forEach(opt => {
+                        const btn = document.createElement('div');
+                        btn.className = 'option-btn';
+                        btn.textContent = opt;
+                        btn.addEventListener('click', () => checkAnswer(opt, task.target));
+                        grid.appendChild(btn);
+                    });
+                }
+            },
+            'visual-discrimination': {
+                title: 'Visual Discrimination',
+                icon: '👁️',
+                desc: 'Spot the difference',
+                offlineTask: 'Find two socks or shoes that match exactly.',
+                examples: ['same vs different', 'color difference', 'shape orientation'],
+                render: () => {
+                    const tasks = [
+                        {
+                            instruction: 'Which two are exactly the same?',
+                            items: ['🔴', '🔴', '🔵', '🟢'],
+                            answer: '🔴'
+                        },
+                        {
+                            instruction: 'Which two match?',
+                            items: ['⭐', '⭐', '🔷', '⭕'],
+                            answer: '⭐'
+                        },
+                        {
+                            instruction: 'Find the pair:',
+                            items: ['🍎', '🍊', '🍎', '🍌'],
+                            answer: '🍎'
+                        }
+                    ];
+                    const task = tasks[Math.floor(Math.random() * tasks.length)];
+                    
+                    const canvas = document.getElementById('canvas');
+                    canvas.innerHTML = `
+                        <div class="question">${task.instruction}</div>
+                        <div class="options-grid" id="optionsGrid"></div>
+                        <p style="color: var(--text-secondary); margin-top: 2rem; font-size: 1.1rem;">Tap any one that matches</p>
+                    `;
+                    
+                    const grid = document.getElementById('optionsGrid');
+                    task.items.forEach(item => {
+                        const btn = document.createElement('div');
+                        btn.className = 'option-btn';
+                        btn.textContent = item;
+                        btn.addEventListener('click', () => checkAnswer(item, task.answer));
+                        grid.appendChild(btn);
+                    });
+                }
+            }
+        };
+
+        // Session State
+        let currentActivity = null;
+        let session = { attempts: 0, correct: 0, rounds: 0, totalRounds: 5 };
+
+        // Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Activity Functions
+        function startActivity(activityId) {
+            currentActivity = activityId;
+            session = { attempts: 0, correct: 0, rounds: 0, totalRounds: 5 };
+            
+            document.getElementById('activityTitle').textContent = activities[activityId].title;
+            document.getElementById('feedbackArea').innerHTML = '';
+            showScreen('activityScreen');
+            
+            // Add progress indicator
+            updateProgressIndicator();
+            activities[activityId].render();
+        }
+
+        function updateProgressIndicator() {
+            const canvas = document.getElementById('canvas');
+            let indicator = document.getElementById('progressIndicator');
+            
+            if (!indicator) {
+                indicator = document.createElement('div');
+                indicator.id = 'progressIndicator';
+                indicator.style.cssText = 'text-align: center; margin-bottom: 2rem; font-size: 1.2rem; color: var(--text-secondary);';
+                canvas.parentElement.insertBefore(indicator, canvas);
+            }
+            
+            indicator.innerHTML = `
+                <div style="display: flex; gap: 0.5rem; justify-content: center; align-items: center; margin-bottom: 0.5rem;">
+                    ${Array.from({length: session.totalRounds}, (_, i) => {
+                        const completed = i < session.rounds;
+                        return `<div style="width: 40px; height: 8px; background: ${completed ? 'var(--success)' : 'var(--border)'}; border-radius: 4px;"></div>`;
+                    }).join('')}
+                </div>
+                <p>Round ${session.rounds + 1} of ${session.totalRounds}</p>
+            `;
+        }
+
+        function checkAnswer(selected, correct) {
+            session.attempts++;
+            
+            if (selected === correct) {
+                session.correct++;
+                session.rounds++;
+                updateProgressIndicator();
+                
+                showFeedback("Let's continue", true);
+                setTimeout(() => {
+                    if (session.rounds >= session.totalRounds) {
+                        endActivity();
+                    } else {
+                        document.getElementById('feedbackArea').innerHTML = '';
+                        activities[currentActivity].render();
+                    }
+                }, 1500);
+            } else {
+                showFeedback('Try again', false);
+                setTimeout(() => {
+                    document.getElementById('feedbackArea').innerHTML = '';
+                }, 1500);
+            }
+        }
+
+        function addToSequence(item, btn) {
+            if (window.userSeq.length < window.correctSeq.length) {
+                window.userSeq.push(item);
+                btn.style.opacity = '0.3';
+                btn.style.pointerEvents = 'none';
+                
+                const builder = document.getElementById('seqBuilder');
+                const existingText = builder.querySelector('p');
+                if (existingText) existingText.remove();
+                
+                const itemEl = document.createElement('div');
+                itemEl.className = 'sequence-item';
+                itemEl.textContent = item;
+                builder.appendChild(itemEl);
+                
+                if (window.userSeq.length === window.correctSeq.length) {
+                    session.attempts++;
+                    const isCorrect = JSON.stringify(window.userSeq) === JSON.stringify(window.correctSeq);
+                    
+                    if (isCorrect) {
+                        session.correct++;
+                        session.rounds++;
+                        updateProgressIndicator();
+                        
+                        showFeedback("Let's continue", true);
+                        setTimeout(() => {
+                            if (session.rounds >= session.totalRounds) {
+                                endActivity();
+                            } else {
+                                document.getElementById('feedbackArea').innerHTML = '';
+                                activities[currentActivity].render();
+                            }
+                        }, 1500);
+                    } else {
+                        showFeedback('Try again', false);
+                        setTimeout(() => {
+                            document.getElementById('feedbackArea').innerHTML = '';
+                            activities[currentActivity].render();
+                        }, 1500);
+                    }
+                }
+            }
+        }
+
+        function sortItem(item, btn) {
+            btn.style.display = 'none';
+            
+            const group1 = document.getElementById('group1');
+            const group2 = document.getElementById('group2');
+            
+            const itemEl1 = document.createElement('div');
+            itemEl1.className = 'sequence-item';
+            itemEl1.textContent = item;
+            itemEl1.style.cursor = 'pointer';
+            itemEl1.dataset.item = item;
+            itemEl1.dataset.group = 'group1';
+            
+            const itemEl2 = itemEl1.cloneNode(true);
+            itemEl2.dataset.group = 'group2';
+            
+            itemEl1.addEventListener('click', () => moveToGroup(itemEl1, 'group2'));
+            itemEl2.addEventListener('click', () => moveToGroup(itemEl2, 'group1'));
+            
+            // Let user choose which group
+            const tooltip = document.createElement('div');
+            tooltip.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); z-index: 2000;';
+            tooltip.innerHTML = `
+                <p style="margin-bottom: 1rem; font-size: 1.2rem;">Where does ${item} belong?</p>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn" id="chooseGroup1">${window.catData.category1}</button>
+                    <button class="btn btn-secondary" id="chooseGroup2">${window.catData.category2}</button>
+                </div>
+            `;
+            document.body.appendChild(tooltip);
+            
+            document.getElementById('chooseGroup1').addEventListener('click', () => {
+                group1.appendChild(itemEl1);
+                window.sorted.group1.push(item);
+                document.body.removeChild(tooltip);
+            });
+            
+            document.getElementById('chooseGroup2').addEventListener('click', () => {
+                group2.appendChild(itemEl2);
+                window.sorted.group2.push(item);
+                document.body.removeChild(tooltip);
+            });
+        }
+
+        function checkSorting() {
+            session.attempts++;
+            
+            const correctSort1 = window.catData.group1.every(item => window.sorted.group1.includes(item));
+            const correctSort2 = window.catData.group2.every(item => window.sorted.group2.includes(item));
+            const allSorted = window.sorted.group1.length + window.sorted.group2.length === window.catData.items.length;
+            
+            if (correctSort1 && correctSort2 && allSorted) {
+                session.correct++;
+                session.rounds++;
+                updateProgressIndicator();
+                
+                showFeedback("Let's continue", true);
+                setTimeout(() => {
+                    if (session.rounds >= session.totalRounds) {
+                        endActivity();
+                    } else {
+                        document.getElementById('feedbackArea').innerHTML = '';
+                        activities[currentActivity].render();
+                    }
+                }, 1500);
+            } else {
+                showFeedback('You can move items between groups and try again', false);
+                setTimeout(() => {
+                    document.getElementById('feedbackArea').innerHTML = '';
+                }, 2000);
+            }
+        }
+
+        function showFeedback(msg, success) {
+            const area = document.getElementById('feedbackArea');
+            area.innerHTML = `<div class="feedback ${success ? 'success' : 'try-again'}">${msg}</div>`;
+        }
+
+        function endActivity() {
+            if (session.attempts > 0) {
+                // Remove progress indicator
+                const indicator = document.getElementById('progressIndicator');
+                if (indicator) indicator.remove();
+                
+                const data = Storage.get();
+                
+                if (!data.progress[currentActivity]) {
+                    data.progress[currentActivity] = { sessions: 0, accuracy: [], level: 1 };
+                }
+                
+                const accuracy = session.correct / session.attempts;
+                data.progress[currentActivity].sessions++;
+                data.progress[currentActivity].accuracy.push(accuracy);
+                
+                // Adaptive logic
+                const recent = data.progress[currentActivity].accuracy.slice(-3);
+                const avg = recent.reduce((a, b) => a + b, 0) / recent.length;
+                
+                if (avg > 0.85 && data.progress[currentActivity].level < 5) {
+                    data.progress[currentActivity].level++;
+                    data.adaptations.push({
+                        activity: currentActivity,
+                        reason: 'Consistent high accuracy observed',
+                        rule: 'If accuracy > 85% over 3 sessions, increase level',
+                        time: new Date().toISOString()
+                    });
+                } else if (avg < 0.4 && data.progress[currentActivity].level > 1) {
+                    data.progress[currentActivity].level--;
+                    data.adaptations.push({
+                        activity: currentActivity,
+                        reason: 'Providing additional support',
+                        rule: 'If accuracy < 40% over 3 sessions, decrease level',
+                        time: new Date().toISOString()
+                    });
+                }
+                
+                Storage.save(data);
+                showOfflineTask();
+            }
+        }
+
+        function showOfflineTask() {
+            const task = activities[currentActivity].offlineTask;
+            document.getElementById('offlineTaskText').textContent = task;
+            document.getElementById('offlineModal').classList.add('active');
+        }
+
+        function markTask(status) {
+            const data = Storage.get();
+            data.offlineTasks.push({
+                activity: currentActivity,
+                task: activities[currentActivity].offlineTask,
+                status: status,
+                time: new Date().toISOString()
+            });
+            Storage.save(data);
+            
+            document.getElementById('offlineModal').classList.remove('active');
+            showScreen('childInterface');
+        }
+
+        // Dashboard Functions
+        function renderDashboard() {
+            const data = Storage.get();
+            
+            // Progress cards
+            const grid = document.getElementById('progressGrid');
+            grid.innerHTML = '';
+            
+            Object.keys(activities).forEach(id => {
+                const progress = data.progress[id] || { sessions: 0, accuracy: [], level: 1 };
+                const avg = progress.accuracy.length > 0 
+                    ? (progress.accuracy.reduce((a, b) => a + b, 0) / progress.accuracy.length * 100).toFixed(0)
+                    : 0;
+                
+                const card = document.createElement('div');
+                card.className = 'progress-card';
+                card.innerHTML = `
+                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">${activities[id].icon}</div>
+                    <div class="progress-label">${activities[id].title}</div>
+                    <p style="color: var(--text-secondary); margin: 0.5rem 0;">Sessions: ${progress.sessions}</p>
+                    <p style="color: var(--text-secondary); margin: 0.5rem 0;">Level: ${progress.level}</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${avg}%"></div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">Accuracy: ${avg}%</p>
+                `;
+                grid.appendChild(card);
+            });
+            
+            // Task log
+            const taskLog = document.getElementById('taskLog');
+            const recentTasks = data.offlineTasks.slice(-10).reverse();
+            
+            if (recentTasks.length === 0) {
+                taskLog.innerHTML = '<p style="color: var(--text-secondary); padding: 1rem;">No offline tasks completed yet. Complete an activity to see offline tasks here.</p>';
+            } else {
+                taskLog.innerHTML = recentTasks.map(t => `
+                    <div class="log-item">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <span style="font-size: 1.5rem;">${activities[t.activity].icon}</span>
+                            <strong>${activities[t.activity].title}</strong>
+                        </div>
+                        <p style="color: var(--text-secondary); margin: 0.5rem 0; font-size: 0.9rem;">${t.task}</p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                            Status: <strong style="color: ${t.status === 'done' ? 'var(--success)' : 'var(--accent)'};">${t.status}</strong> • 
+                            ${new Date(t.time).toLocaleDateString()}
+                        </p>
+                    </div>
+                `).join('');
+            }
+            
+            // Adaptation log
+            const adaptLog = document.getElementById('adaptLog');
+            const recentAdapt = data.adaptations.slice(-5).reverse();
+            
+            if (recentAdapt.length === 0) {
+                adaptLog.innerHTML = '<p style="color: var(--text-secondary); padding: 1rem;">No adaptations recorded yet. The system will adapt difficulty based on performance over multiple sessions.</p>';
+            } else {
+                adaptLog.innerHTML = recentAdapt.map(a => `
+                    <div class="log-item">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <span style="font-size: 1.5rem;">${activities[a.activity].icon}</span>
+                            <strong>${activities[a.activity].title}</strong>
+                        </div>
+                        <p style="margin: 0.5rem 0;"><strong style="color: var(--accent);">Why this changed:</strong> ${a.reason}</p>
+                        <p style="margin: 0.5rem 0; color: var(--text-secondary); font-size: 0.9rem;">
+                            <strong>Rule:</strong> ${a.rule}
+                        </p>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                            ${new Date(a.time).toLocaleString()}
+                        </p>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function setSensoryMode(mode) {
+            const data = Storage.get();
+            data.sensoryMode = mode;
+            Storage.save(data);
+            
+            document.body.setAttribute('data-sensory', mode);
+            document.getElementById('currentMode').textContent = 
+                mode.charAt(0).toUpperCase() + mode.slice(1);
+            
+            document.querySelectorAll('.sensory-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+        }
+
+        // Initialize Activity Grid
+        function initActivityGrid() {
+            const grid = document.getElementById('activityGrid');
+            grid.innerHTML = '';
+            
+            Object.keys(activities).forEach(id => {
+                if (id === 'sequencing') return; // Skip recommended one
+                
+                const card = document.createElement('div');
+                card.className = 'activity-card';
+                card.innerHTML = `
+                    <div class="activity-icon">${activities[id].icon}</div>
+                    <div class="activity-title">${activities[id].title}</div>
+                    <div class="activity-desc">${activities[id].desc}</div>
+                `;
+                card.addEventListener('click', () => startActivity(id));
+                grid.appendChild(card);
+            });
+        }
+
+        // Event Listeners
+        document.getElementById('startLearningBtn').addEventListener('click', () => {
+            showScreen('childInterface');
+        });
+
+        document.getElementById('parentDashBtn').addEventListener('click', () => {
+            renderDashboard();
+            showScreen('parentDashboard');
+        });
+
+        document.getElementById('exitChild').addEventListener('click', () => {
+            showScreen('landing');
+        });
+
+        document.getElementById('exitParent').addEventListener('click', () => {
+            showScreen('landing');
+        });
+
+        document.getElementById('backBtn').addEventListener('click', () => {
+            // Remove progress indicator when exiting
+            const indicator = document.getElementById('progressIndicator');
+            if (indicator) indicator.remove();
+            showScreen('childInterface');
+        });
+
+        document.getElementById('recommendedCard').addEventListener('click', () => {
+            startActivity('sequencing');
+        });
+
+        document.getElementById('taskDone').addEventListener('click', () => {
+            markTask('done');
+        });
+
+        document.getElementById('taskSkip').addEventListener('click', () => {
+            markTask('skipped');
+        });
+
+        document.querySelectorAll('.sensory-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                setSensoryMode(btn.dataset.mode);
+            });
+        });
+
+        // Initialize
+        Storage.init();
+        const data = Storage.get();
+        document.body.setAttribute('data-sensory', data.sensoryMode);
+        initActivityGrid();
+    </script>
+</body>
+</html>
